@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Footer from "./componets/Footer";
 
-
 export default function HomePage() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("/data/products.json")
+    fetch("/api/belal/products") // 👉 MongoDB থেকে ডেটা আসবে
       .then((res) => res.json())
       .then((data) => setProducts(data))
-      .catch((err) => console.log(err));
+      .catch((err) => console.error("Fetch error:", err));
   }, []);
 
   return (
@@ -37,21 +36,32 @@ export default function HomePage() {
           Product Highlights
         </h3>
         <div className="grid md:grid-cols-3 gap-8">
-          {products.map((product) => (
+          {products.slice(0, 6).map((product) => (
             <div
-              key={product.id}
+              key={product._id}
               className="border rounded-lg p-6 shadow hover:shadow-lg transition"
             >
+             {product.image && (
               <img
                 src={product.image}
                 alt={product.name}
-                className="mb-2 rounded"
-              />
+                className="w-full h-48 object-cover"/>
+            )}
               <h4 className="text-lg font-semibold mb-2">{product.name}</h4>
-              <p>{product.description}</p>
-              <p className="font-bold mt-2">${product.price}</p>
+              <p className="text-gray-600 line-clamp-2">{product.description}</p>
+              <p className="font-bold mt-2 text-blue-600">${product.price}</p>
             </div>
           ))}
+        </div>
+
+        {/* See All Button */}
+        <div className="text-center mt-10">
+          <Link
+            href="/products"
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700"
+          >
+            See All Products
+          </Link>
         </div>
       </section>
 

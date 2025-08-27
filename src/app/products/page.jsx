@@ -4,14 +4,34 @@ import { useEffect, useState } from "react";
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
 
+  // Load products
+  const fetchProducts = async () => {
+    const res = await fetch("/api/belal/products");
+    const data = await res.json();
+    setProducts(data);
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const res = await fetch("/api/belal/products");
-      const data = await res.json();
-      setProducts(data);
-    };
     fetchProducts();
   }, []);
+
+  // Delete product
+  const handleDelete = async (id) => {
+    const confirmDelete = confirm("Are you sure you want to delete this product?");
+    if (!confirmDelete) return;
+
+    const res = await fetch(`/api/belal/products?id=${id}`, {
+      method: "DELETE",
+    });
+    const data = await res.json();
+
+    if (data.message === "Deleted") {
+      alert("Product deleted successfully!");
+      fetchProducts(); // reload products
+    } else {
+      alert("Failed to delete product");
+    }
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -30,9 +50,20 @@ export default function ProductsPage() {
               />
             )}
             <div className="p-4">
-              <h2 className="text-lg font-semibold">{product.name}</h2>
+              <h2 className="text-lg font-semibold text-black">{product.name}</h2>
               <p className="text-gray-600 text-sm mb-2">{product.description}</p>
               <p className="text-blue-600 font-bold">৳ {product.price}</p>
+              <div className="flex justify-between mt-4">
+                <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                  View Details
+                </button>
+                <button
+                  onClick={() => handleDelete(product._id)}
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         ))}

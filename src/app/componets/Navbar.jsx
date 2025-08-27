@@ -80,6 +80,13 @@ export default function Navbar() {
 
           {user ? (
             <>
+            <Link
+                href="/delete-products"
+                className="block px-3 py-1 bg-blue-600 rounded hover:bg-blue-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                delete
+              </Link>
               <Link
                 href="/belal/add-products"
                 className="block px-3 py-1 bg-blue-600 rounded hover:bg-blue-700"

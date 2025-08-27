@@ -1,38 +1,5 @@
-/* import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-
-export const authOptions = {
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (credentials.username === "test" && credentials.password === "1234") {
-          return { id: 1, name: "Test User" };
-        }
-        return null;
-      },
-    }),
-  ],
-  pages: { signIn: "/login", error: "/login" },
-  session: { strategy: "jwt" },
-  callbacks: {
-    async redirect({ url, baseUrl }) {
-      return "/products";
-    },
-  },
-};
-
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
- */
-
-
 import { NextResponse } from "next/server";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
@@ -77,15 +44,37 @@ export async function GET() {
     const db = client.db(process.env.MONGODB_DB);
     const products = await db.collection("products").find({}).toArray();
 
-    // imageBuffer কে base64 string এ রূপান্তর করব
     const formatted = products.map((p) => ({
       ...p,
+      _id: p._id.toString(), // string এ রূপান্তর
       image: p.image
         ? `data:${p.imageType};base64,${p.image.toString("base64")}`
         : null,
     }));
 
     return NextResponse.json(formatted);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+// ✅ DELETE option
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id"); // /api/products?id=xxxx
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
+
+    await client.connect();
+    const db = client.db(process.env.MONGODB_DB);
+    const result = await db
+      .collection("products")
+      .deleteOne({ _id: new ObjectId(id) });
+
+    return NextResponse.json({ message: "Deleted", result });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
