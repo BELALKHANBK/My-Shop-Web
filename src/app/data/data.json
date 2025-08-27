@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Smartphone X",
+    "description": "A high-end smartphone with OLED display and fast processor.",
+    "price": 999,
+    "image": "https://i.ibb.co/XZYRvdtb/a5.jpg"
+  },
+  {
+    "id": 2,
+    "name": "Wireless Headphones",
+    "description": "Noise-cancelling over-ear wireless headphones with long battery life.",
+    "price": 199,
+    "image": "https://i.ibb.co/XZYRvdtb/a5.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Gaming Laptop",
+    "description": "Powerful gaming laptop with RTX graphics and high refresh rate display.",
+    "price": 1499,
+    "image": "https://i.ibb.co/XZYRvdtb/a5.jpg"
+  },
+  {
+    "id": 4,
+    "name": "Smartwatch Pro",
+    "description": "Feature-rich smartwatch with heart rate monitor and GPS.",
+    "price": 299,
+    "image": "https://i.ibb.co/XZYRvdtb/a5.jpg"
+  },
+  {
+    "id": 5,
+    "name": "Bluetooth Speaker",
+    "description": "Portable Bluetooth speaker with deep bass and long battery life.",
+    "price": 89,
+    "image": "https://i.ibb.co/XZYRvdtb/a5.jpg"
+  }
+]
